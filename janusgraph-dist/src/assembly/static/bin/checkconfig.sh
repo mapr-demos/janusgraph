@@ -51,7 +51,7 @@ case `uname` in
     CYGWIN*) CP=`cygpath -p -w "$CP"`
 esac
 
-export CLASSPATH="${CLASSPATH:-}:$CP"
+export CLASSPATH="${CLASSPATH:-}:$CP:`hbase classpath`:`hadoop classpath`:`mapr classpath`"
 
 # Find Java
 if [ -z "${JAVA_HOME:-}" ]; then

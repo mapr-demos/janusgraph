@@ -29,8 +29,9 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-shaded-client</artifactId>
+            <artifactId>hbase-client</artifactId>
             <version>${hbase100.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -49,8 +50,9 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-shaded-server</artifactId>
+            <artifactId>hbase-server</artifactId>
             <version>${hbase100.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -151,18 +153,21 @@
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-annotations</artifactId>
                     <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
                     <optional>true</optional>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-hdfs</artifactId>
                     <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
                     <optional>true</optional>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-client</artifactId>
                     <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
                     <optional>true</optional>
                 </dependency>
             </dependencies>

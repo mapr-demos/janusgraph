@@ -81,10 +81,12 @@
         <sesame.version>2.7.10</sesame.version>
         <slf4j.version>1.7.12</slf4j.version>
         <httpcomponents.version>4.4.1</httpcomponents.version>
-        <hadoop2.version>2.7.2</hadoop2.version>
+        <!--<hadoop2.version>2.7.2</hadoop2.version>-->
+        <hadoop2.version>2.7.0-mapr-1710</hadoop2.version>
         <hbase098.core.version>0.98.24</hbase098.core.version>
         <hbase098.version>${hbase098.core.version}-hadoop2</hbase098.version>
-        <hbase100.core.version>1.2.6</hbase100.core.version>
+        <!--<hbase100.core.version>1.2.6</hbase100.core.version>-->
+        <hbase100.core.version>1.1.8-mapr-1710</hbase100.core.version>
         <hbase100.version>${hbase100.core.version}</hbase100.version>
         <bigtable.version>1.0.0</bigtable.version>
         <scylladb.version>1.7.1</scylladb.version>
@@ -101,7 +103,9 @@
         <antlr.version>3.2</antlr.version>
         <asm3.version>3.1</asm3.version>
         <asm4.version>4.0</asm4.version>
-        <zookeeper.version>3.4.6</zookeeper.version>
+        <!--<zookeeper.version>3.4.6</zookeeper.version>-->
+        <!--<zookeeper.version>3.4.5-mapr-1710</zookeeper.version>-->
+        <zookeeper.version>3.4.5-mapr-1406</zookeeper.version>
         <jersey.version>1.9</jersey.version>
         <!-- align with org.apache.tinkerpop:tinkerpop -->
         <netty4.version>4.0.53.Final</netty4.version>
@@ -148,6 +152,14 @@
         <module>janusgraph-examples</module>
     </modules>
     <repositories>
+
+        <repository>
+            <id>mapr-releases</id>
+            <url>http://repository.mapr.com/maven/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>true</enabled></releases>
+        </repository>
+
         <repository>
             <id>apache-snapshots</id>
             <name>repository.apache.org snapshots</name>
@@ -1190,16 +1202,19 @@
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-annotations</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-auth</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-client</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                         <exclusions>
                             <exclusion>
                                 <groupId>javax.servlet</groupId>
@@ -1211,16 +1226,19 @@
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-common</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-hdfs</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-hdfs</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                         <classifier>tests</classifier>
                         <type>test-jar</type>
                     </dependency>
@@ -1228,21 +1246,25 @@
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-mapreduce-client-common</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-mapreduce-client-core</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                         <classifier>tests</classifier>
                         <type>test-jar</type>
                     </dependency>
@@ -1250,21 +1272,25 @@
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-mapreduce-client-shuffle</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-yarn-api</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-yarn-common</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-yarn-server-common</artifactId>
                         <version>${hadoop2.version}</version>
+                        <scope>provided</scope>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
