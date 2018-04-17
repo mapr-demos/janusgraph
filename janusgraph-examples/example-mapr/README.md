@@ -2,8 +2,24 @@
 
 ## About MapR-DB Binary
 
-[Apache HBase](http://hbase.apache.org/) is a scalable, distributed big data
-store.
+[MapR-DB Binary](https://maprdocs.mapr.com/60/MapROverview/maprDB-overview-binary.html) supports binary tables as a 
+native data store. MapR-DB binary tables are identical conceptually to tables in Apache HBase.
+
+## Example application
+
+Example application uses simple Social Network graph demonstrate basic operations such as creating edges and vertices,
+updating and deleting vertices, querying the graph.
+
+### Simple Social Network Graph
+![](docs/images/network-graph.png?raw=true "Simple Social Network Graph")
+
+In this basic example we have the following relationships:
+
+* Bob is following Daniel and John, and is followed by Daniel and Mike.
+* Daniel is following Bob and John, and is followed by Bob.
+* John is following Chris, and is followed by Bob and Daniel.
+* Mike is following Bob.
+* Chris is followed by John.
 
 ### MapR-DB Binary configuration
 
@@ -71,5 +87,5 @@ After running an example, you may want to drop the graph from storage. Make
 sure to stop the application before dropping the graph. Run this command on MapR Cluster's Node:
 
 ```
-$ java -cp example-mapr.jar:`hbase classpath`:`hadoop classpath`:`mapr classpath` org.janusgraph.example.JanusGraphMapRApp drop
+$ java -cp example-mapr.jar:`hbase classpath`:`hadoop classpath`:`mapr classpath` org.janusgraph.example.JanusGraphMapRApp mapr-db-example.properties drop
 ```
