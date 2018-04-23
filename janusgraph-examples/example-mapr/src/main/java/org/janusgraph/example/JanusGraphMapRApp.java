@@ -1,12 +1,17 @@
 package org.janusgraph.example;
 
+import com.github.javafaker.Faker;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.core.RelationType;
@@ -14,12 +19,16 @@ import org.janusgraph.core.schema.JanusGraphManagement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 public class JanusGraphMapRApp {
 
     private static final Logger log = LoggerFactory.getLogger(JanusGraphMapRApp.class);
+
+    private static final int PERSON_NUM = 20;
+    private static final LocalDate FOLLOWING_DATE_START = LocalDate.of(2005, 1, 1);
+    private static final LocalDate FOLLOWING_DATE_END = LocalDate.of(2018, 4, 23);
 
     private static String propFileName;
     private static Graph graph;
@@ -47,6 +56,7 @@ public class JanusGraphMapRApp {
 
         // build the graph structure
         createElements();
+
         // read to see they were made
         readElements();
 
@@ -71,7 +81,7 @@ public class JanusGraphMapRApp {
      * graph instance is initialized.
      */
     public static GraphTraversalSource openGraph() throws ConfigurationException {
-        log.info("Opening graph");
+        log.info("============================ Opening graph ============================");
         Configuration conf = new PropertiesConfiguration(propFileName);
         graph = GraphFactory.open(conf);
         g = graph.traversal();
@@ -82,7 +92,7 @@ public class JanusGraphMapRApp {
      * Closes the graph instance.
      */
     public static void closeGraph() throws Exception {
-        log.info("Closing graph");
+        log.info("============================ Closing graph ============================");
         try {
             if (g != null) {
                 g.close();
@@ -117,7 +127,7 @@ public class JanusGraphMapRApp {
                 return;
             }
 
-            log.info("Creating schema");
+            log.info("============================ Creating schema ============================");
             createProperties(management);
             createVertexLabels(management);
             createEdgeLabels(management);
@@ -156,37 +166,49 @@ public class JanusGraphMapRApp {
      */
     public static void createElements() {
         try {
-            // naive check if the graph was previously created
-            if (g.V().has("name", "saturn").hasNext()) {
+
+            // check if the graph was previously created
+            if (g.V().hasNext()) {
                 g.tx().rollback();
                 return;
             }
             log.info("============================ Creating elements ============================");
 
-            // see GraphOfTheGodsFactory.java
 
-            final Vertex bob = g.addV("person").property("name", "Bob").property("age", 19).next();
-            final Vertex mike = g.addV("person").property("name", "Mike").property("age", 25).next();
-            final Vertex daniel = g.addV("person").property("name", "Daniel").property("age", 22).next();
-            final Vertex john = g.addV("person").property("name", "John").property("age", 27).next();
-            final Vertex chris = g.addV("person").property("name", "Chris").property("age", 24).next();
+            Faker faker = new Faker();
+            Random random = new Random();
+            List<Vertex> vertices = new ArrayList<>();
+            for (int i = 0; i < PERSON_NUM; i++) {
+                String name = faker.name().fullName();
+                Integer age = 15 + random.nextInt(50);
+                Vertex vertex = g.addV("person").property("name", name).property("age", age).next();
+                vertices.add(vertex);
+            }
 
-            g.V(bob).as("a").V(mike).addE("followedBy").property("date", "19-01-2015").from("a").next();
-            g.V(bob).as("a").V(daniel).addE("followedBy").property("date", "16-05-2013").from("a").next();
-            g.V(bob).as("a").V(daniel).addE("following").property("date", "17-05-2013").from("a").next();
-            g.V(bob).as("a").V(john).addE("following").property("date", "28-11-2013").from("a").next();
+            for (Vertex person : vertices) {
 
-            g.V(mike).as("a").V(bob).addE("following").property("date", "19-01-2015").from("a").next();
+                // Random number of subscriptions
+                int subscriptions = random.nextInt(PERSON_NUM / 2);
+                Set<Integer> indicesOfFollowing = new HashSet<>();
+                while (indicesOfFollowing.size() < subscriptions) {
 
-            g.V(daniel).as("a").V(bob).addE("following").property("date", "12-07-2017").from("a").next();
-            g.V(daniel).as("a").V(bob).addE("followedBy").property("date", "13-08-2015").from("a").next();
-            g.V(daniel).as("a").V(john).addE("following").property("date", "01-01-2018").from("a").next();
+                    int randomIndex = random.nextInt(PERSON_NUM);
+                    Vertex randomPerson = vertices.get(randomIndex);
 
-            g.V(john).as("a").V(bob).addE("followedBy").property("date", "27-07-2011").from("a").next();
-            g.V(john).as("a").V(daniel).addE("followedBy").property("date", "25-10-2015").from("a").next();
-            g.V(john).as("a").V(chris).addE("following").property("date", "17-03-2016").from("a").next();
+                    // Follow random person
+                    if (!person.id().equals(randomPerson.id()) && !indicesOfFollowing.contains(randomIndex)) {
 
-            g.V(chris).as("a").V(john).addE("followedBy").property("date", "16-04-2017").from("a").next();
+                        long randomDays = (long) (FOLLOWING_DATE_START.toEpochDay() + random.nextDouble() *
+                            (FOLLOWING_DATE_END.toEpochDay() - FOLLOWING_DATE_START.toEpochDay()));
+                        LocalDate randomDate = LocalDate.ofEpochDay(randomDays);
+
+                        g.V(person).as("a").V(randomPerson).addE("following")
+                            .property("date", randomDate.toString()).from("a").next();
+
+                        indicesOfFollowing.add(randomIndex);
+                    }
+                }
+            }
 
             g.tx().commit();
 
@@ -206,11 +228,53 @@ public class JanusGraphMapRApp {
             }
 
             log.info("============================ Reading elements ============================");
-            readPersonElement("Bob");
-            readPersonElement("Mike");
-            readPersonElement("Daniel");
-            readPersonElement("John");
-            readPersonElement("Chris");
+
+            // Iterate over all vertices
+            GraphTraversal<Vertex, Vertex> traversal = g.V();
+            int counter = 0;
+            while (traversal.hasNext()) {
+
+                Vertex vertex = traversal.next();
+                String personName = vertex.value("name");
+                Integer personAge = vertex.value("age");
+                log.info("{})", counter);
+                log.info("Person: {}, {}", personName, personAge);
+                log.info("Vertex property list: {}", IteratorUtils.list(vertex.values()));
+
+                // Get 'followedBy' edges
+                Iterator<Edge> followedByIterator = vertex.edges(Direction.IN, "following");
+                if (followedByIterator.hasNext()) {
+                    log.info("{} followed by:", personName);
+                    followedByIterator.forEachRemaining(e -> {
+                        String followerName = e.outVertex().value("name");
+                        String followedSince = e.value("date");
+
+                        log.info("\t{} since {}", followerName, followedSince);
+                    });
+
+                    // Count 'followedBy' edges
+                    log.info("Total followers: {}", IteratorUtils.count(g.V(vertex).inE("following")));
+                }
+
+                // Get 'following' edges
+                Iterator<Edge> followingIterator = vertex.edges(Direction.OUT, "following");
+                if (followingIterator.hasNext()) {
+                    log.info("{} follows:", personName);
+                    followingIterator.forEachRemaining(e -> {
+                        String followingName = e.inVertex().value("name");
+                        String followingSince = e.value("date");
+
+                        log.info("\t{} since {}", followingName, followingSince);
+                    });
+
+                    // Count 'following' edges
+                    log.info("Total following: {}", IteratorUtils.count(g.V(vertex).outE("following")));
+                }
+
+                log.info("********************************\n");
+                counter++;
+            }
+
 
         } finally {
             // the default behavior automatically starts a transaction for
@@ -218,20 +282,6 @@ public class JanusGraphMapRApp {
             // even for read-only graph query operations
             g.tx().rollback();
         }
-    }
-
-    private static void readPersonElement(String name) {
-        // look up vertex by name can use a composite index in JanusGraph
-        final Optional<Map<Object, Object>> v = g.V().has("name", name).valueMap(true).tryNext();
-        if (v.isPresent()) {
-            log.info(v.get().toString());
-        } else {
-            log.warn("{} not found", name);
-        }
-
-        // look up an incident edge
-        log.info("{}'s followers: {}", name, g.V().has("name", name).out("followedBy").values("name").dedup().toList());
-        log.info("{} follows: {}", name, g.V().has("name", name).out("following").values("name").dedup().toList());
     }
 
     /**
@@ -244,8 +294,13 @@ public class JanusGraphMapRApp {
                 return;
             }
             log.info("============================ Updating elements ============================");
+
             final long ts = System.currentTimeMillis();
-            g.V().has("name", "Bob").property("ts", ts).iterate();
+            GraphTraversal<Vertex, Vertex> toUpdate = g.V().sample(1);
+            toUpdate.property("timestamp", ts);
+            log.info("Adding 'timestamp' field to '{}' vertex", toUpdate.values("name").toStream().findAny().get());
+            toUpdate.iterate();
+
             g.tx().commit();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -263,8 +318,12 @@ public class JanusGraphMapRApp {
                 return;
             }
             log.info("============================ Deleting elements ============================");
-            // note that this will succeed whether or not pluto exists
-            g.V().has("name", "Bob").drop().iterate();
+
+            Vertex toDelete = g.V().sample(1).next();
+            String name = toDelete.value("name");
+            log.info("Deleting '{}' vertex", name);
+            g.V(toDelete).drop().iterate();
+
             g.tx().commit();
         } catch (Exception e) {
             log.error(e.getMessage(), e);

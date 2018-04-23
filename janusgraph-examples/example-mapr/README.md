@@ -10,16 +10,10 @@ native data store. MapR-DB binary tables are identical conceptually to tables in
 Example application uses simple Social Network graph demonstrate basic operations such as creating edges and vertices,
 updating and deleting vertices, querying the graph.
 
-### Simple Social Network Graph
-![](docs/images/network-graph.png?raw=true "Simple Social Network Graph")
+### Social Network Graph
 
-In this basic example we have the following relationships:
-
-* Bob is following Daniel and John, and is followed by Daniel and Mike.
-* Daniel is following Bob and John, and is followed by Bob.
-* John is following Chris, and is followed by Bob and Daniel.
-* Mike is following Bob.
-* Chris is followed by John.
+Sample Social Network Graph consists of `20` vertices and a random number of edges. Each vertex represents a person, that follows an arbitrary number of other persons and can have an arbitrary number of followers. Each vertex has `name` and `age` 
+properties. Edges represent `follows` relation with `date` property.
 
 ### MapR-DB Binary configuration
 
@@ -51,7 +45,6 @@ The required Maven dependencies for MapR-DB Binary the same as for HBase:
 ```
 
 ## Run the example
-
 
 Note, that JanusGraph parent `pom.xml` declares all Hadoop and HBase dependencies with scope `provided`. Thus, we 
 must add to classpath actual artifacts from MapR Cluster's Node.
