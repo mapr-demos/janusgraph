@@ -27,8 +27,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
-            <!--<artifactId>hbase-shaded-client</artifactId>-->
-            <artifactId>hbase-client</artifactId>
+            <artifactId>hbase-shaded-client</artifactId>
+            <!--<artifactId>hbase-client</artifactId>-->
             <version>${hbase100.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -45,5 +45,20 @@
         <example.config>${project.basedir}/conf/jgex-hbase-solr-cloud.properties</example.config>
         <logback.config>${project.basedir}/conf/logback.xml</logback.config>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>janusgraph-mapr</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hbase</groupId>
+                    <!--<artifactId>hbase-shaded-client</artifactId>-->
+                    <artifactId>hbase-client</artifactId>
+                    <version>${hbase100.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>
