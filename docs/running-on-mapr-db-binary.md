@@ -49,9 +49,9 @@ export CLASSPATH="${CLASSPATH:-}:$CP:`hbase classpath`:`hadoop classpath`:`mapr 
 
 ## Build distribution
 
-Run the following command in order to build distribution archive:
+Run the following command in order to build MapR version of distribution archive:
 ```
-mvn clean install -Pjanusgraph-release -Dgpg.skip=true -DskipTests=true
+mvn clean install -Pjanusgraph-mapr-release -Dgpg.skip=true -DskipTests=true
 ```
 This command generates the distribution archive in 
 `janusgraph-dist/janusgraph-dist-hadoop-2/target/janusgraph-$VERSION-hadoop2.zip`. 
@@ -60,7 +60,7 @@ This command generates the distribution archive in
 
 * Copy newly created archive on one of the MapR Cluster's nodes. 
 * Unzip it `janusgraph-$VERSION-hadoop2.zip`. 
-* Add following properties to `cong/janusgraph-hbase.properties`:
+* Add following properties to `conf/janusgraph-hbase.properties`:
 ```
 storage.hostname=maprnodename
 storage.port=5181
@@ -74,7 +74,7 @@ storage.hbase.table=/janusgraph
 ./bin/gremlin.sh
 ```
 
-* Open the graph according to `cong/janusgraph-hbase.properties` file:
+* Open the graph according to `conf/janusgraph-hbase.properties` file:
 
 ```
 gremlin> graph = JanusGraphFactory.open('conf/janusgraph-hbase.properties')

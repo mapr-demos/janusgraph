@@ -79,7 +79,8 @@ esac
 CP=$CP:$( find -L "${SYSTEM_EXT_DIR}" "${USER_EXT_DIR:-${SYSTEM_EXT_DIR}}" -mindepth 1 -maxdepth 1 -type d | \
           sort -u | sed 's/$/\/plugin\/*/' | tr '\n' ':' )
 
-export CLASSPATH="${CLASSPATH:-}:$CP"
+# Add MapR Jars to the classpath
+export CLASSPATH="${CLASSPATH:-}:$CP:`hbase classpath`:`hadoop classpath`:`mapr classpath`"
 
 # Find Java
 if [ -z "${JAVA_HOME:-}" ]; then

@@ -1695,7 +1695,7 @@
         </profile>
 
         <profile>
-            <id>janusgraph-mapr</id>
+            <id>janusgraph-mapr-release</id>
 
             <properties>
                 <hadoop2.version>2.7.0-mapr-1710</hadoop2.version>

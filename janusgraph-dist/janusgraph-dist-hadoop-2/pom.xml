@@ -176,7 +176,7 @@
         </profile>
 
         <profile>
-            <id>janusgraph-mapr</id>
+            <id>janusgraph-mapr-release</id>
 
             <dependencies>
                 <dependency>
@@ -201,6 +201,7 @@
                     </exclusions>
                 </dependency>
             </dependencies>
+
         </profile>
     </profiles>
 </project>

@@ -34,7 +34,7 @@ CP="$CP":$(find -L $EXT -name '*.jar' | sort | tr '\n' ':')
 # (Cygwin only) Use ; classpath separator and reformat paths for Windows ("C:\foo")
 [[ $(uname) = CYGWIN* ]] && CP="$(cygpath -p -w "$CP")"
 
-export CLASSPATH="${CLASSPATH:-}:$CP"
+export CLASSPATH="${CLASSPATH:-}:$CP:`hbase classpath`:`hadoop classpath`:`mapr classpath`"
 
 # Change to $BIN's parent
 cd $BIN/..

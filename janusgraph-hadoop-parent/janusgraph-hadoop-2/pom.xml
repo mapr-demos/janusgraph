@@ -108,7 +108,7 @@
 
     <profiles>
         <profile>
-            <id>janusgraph-mapr</id>
+            <id>janusgraph-mapr-release</id>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
