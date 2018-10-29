@@ -188,5 +188,33 @@
             </build>
         </profile>
 
+        <profile>
+            <id>janusgraph-mapr-release</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hbase</groupId>
+                    <!--<artifactId>hbase-shaded-client</artifactId>-->
+                    <artifactId>hbase-client</artifactId>
+                    <version>${hbase1.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hbase</groupId>
+                    <!--<artifactId>hbase-shaded-server</artifactId>-->
+                    <artifactId>hbase-server</artifactId>
+                    <!--Need the -server artifact for hbase.mapreduce.TableInputFormat (Faunus)-->
+                    <version>${hbase1.version}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.lmax</groupId>
+                            <artifactId>disruptor</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+
+        </profile>
     </profiles>
 </project>

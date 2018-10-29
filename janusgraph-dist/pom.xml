@@ -957,5 +957,68 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>janusgraph-mapr-release</id>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>janusgraph-all</artifactId>
+                    <version>${project.version}</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.hbase</groupId>
+                            <artifactId>hbase-shaded-client</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>assemble-distribution-archive</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <!--
+                                        We set attached=true so that the gpg plugin will
+                                        sign all of our assembly artifacts. We handle
+                                        deployment of the artifacts manually because
+                                        maven-deploy-plugin can't upload files to a flat
+                                        S3 directory; it insists on creating a
+                                        long/packagename/and/artifactid/and/version/
+                                        path at the destination before uploading, and we
+                                        don't want that for our files S3. codehaus's
+                                        wagon:upload plugin comes to our rescue.
+                                    -->
+                                    <attach>true</attach>
+                                    <!--
+                                        archive filenames are of the form
+                                        ${finalName}-${<id /> from assembly descriptor}.${archive
+                                        format extension}
+                                    -->
+                                    <finalName>janusgraph-${project.version}-${hadoop.version.tag}</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
+                                    <descriptors>
+                                        <descriptor>${assembly.descriptor.dir}/mapr.xml</descriptor>
+                                    </descriptors>
+                                    <formats>
+                                        <format>zip</format>
+                                    </formats>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
     </profiles>
 </project>

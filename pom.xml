@@ -177,6 +177,13 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>mapr-releases</id>
+            <url>http://repository.mapr.com/maven/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>true</enabled></releases>
+        </repository>
     </repositories>
     <build>
         <directory>${basedir}/target</directory>
@@ -1663,5 +1670,152 @@
             </build>
         </profile>
 
+        <profile>
+            <id>janusgraph-mapr-release</id>
+
+            <properties>
+                <hadoop2.version>2.7.0-mapr-1803</hadoop2.version>
+                <hbase1.version>1.1.8-mapr-1710</hbase1.version>
+                <zookeeper.version>3.4.5-mapr-1406</zookeeper.version>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-annotations</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.htrace</groupId>
+                            <artifactId>htrace-core</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.apache.curator</groupId>
+                            <artifactId>curator-recipes</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.apache.curator</groupId>
+                            <artifactId>curator-client</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.htrace</groupId>
+                            <artifactId>htrace-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-auth</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.curator</groupId>
+                            <artifactId>curator-framework</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>javax.servlet</groupId>
+                            <artifactId>servlet-api</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                    <classifier>tests</classifier>
+                    <type>test-jar</type>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.htrace</groupId>
+                            <artifactId>htrace-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-common</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-core</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                    <classifier>tests</classifier>
+                    <type>test-jar</type>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-shuffle</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-yarn-api</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-yarn-common</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-yarn-server-common</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                    <version>${zookeeper.version}</version>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>jline</artifactId>
+                            <groupId>jline</groupId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+            </dependencies>
+        </profile>
     </profiles>
 </project>

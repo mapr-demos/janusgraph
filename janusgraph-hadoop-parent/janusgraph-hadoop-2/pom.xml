@@ -106,6 +106,30 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>janusgraph-mapr-release</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-shaded-server</artifactId>
+                    <version>${hbase1.version}</version>
+                    <optional>true</optional>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>disruptor</artifactId>
+                            <groupId>com.lmax</groupId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <build>

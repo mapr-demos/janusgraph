@@ -45,4 +45,18 @@
         <logback.config>${project.basedir}/conf/logback.xml</logback.config>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>janusgraph-mapr-release</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-client</artifactId>
+                    <version>${hbase1.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
 </project>

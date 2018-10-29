@@ -202,5 +202,18 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>janusgraph-mapr-release</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client</artifactId>
+                    <version>${hadoop2.version}</version>
+                    <scope>provided</scope>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 </project>
